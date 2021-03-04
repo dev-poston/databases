@@ -1,17 +1,39 @@
-CREATE DATABASE chat;
+CREATE DATABASE chatterboxdb;
 
-USE chat;
+USE chatterboxdb;
 
-CREATE TABLE messages (
+CREATE TABLE messagesTABLE (
   /* Describe your table here.*/
+  MessageID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  MessageTEXT varchar(255),
+  User int,
+  Room int
+  -- FOREIGN KEY (User) REFERENCES userTABLE (UserID),
+  -- FOREIGN KEY (Room) REFERENCES roomTABLE (RoomID)
 );
 
-/* Create other tables and define schemas for them here! */
+CREATE TABLE userTABLE (
+  UserID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  UserNAME varchar(255),
+  Messages int
+  -- FOREIGN KEY (Messages) REFERENCES messagesTABLE (MessageID)
+);
 
+CREATE TABLE roomTABLE (
+  RoomID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  RoomNAME varchar(255),
+  RoomMESSAGES int
+  -- FOREIGN KEY (RoomMESSAGES) REFERENCES messagesTABLE (MessageID)
+);
+/* Create other tables and define schemas for them here! */
+ALTER TABLE messagesTABLE ADD FOREIGN KEY (User) REFERENCES userTABLE (UserID);
+ALTER TABLE messagesTABLE ADD FOREIGN KEY (Room) REFERENCES roomTABLE (RoomID);
+ALTER TABLE userTABLE ADD FOREIGN KEY (Messages) REFERENCES messagesTABLE (MessageID);
+ALTER TABLE roomTABLE ADD FOREIGN KEY (RoomMESSAGES) REFERENCES messagesTABLE (MessageID);
 
 
 
 /*  Execute this file from the command line by typing:
- *    mysql -u root < server/schema.sql
+ *    mysql -u root -p < server/schema.sql
  *  to create the database and the tables.*/
 
