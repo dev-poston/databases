@@ -4,7 +4,7 @@ module.exports = {
   messages: {
     get: function (req, res) { // a function which handles a get request for all messages
       models.messages.get((data) => {
-        // res//(data);
+        res.send(data);
         //send
         //write
         //head
