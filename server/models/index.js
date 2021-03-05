@@ -12,8 +12,8 @@ module.exports = {
       });
     }, // a function which produces all the messages
     post: function (req, callback) {
-      // do we need to temp lit???
-      db.query('INSERT INTO messagesTABLE(MessageTEXT, User) VALUES(req.json.message, (SELECT UserID FROM UserTABLE WHERE UserName = req.json.username))', (err, result) => {
+      // use question mark
+      db.query('INSERT INTO messagesTABLE(MessageTEXT, User) VALUES(req.json.message, (SELECT UserID FROM UserTABLE WHERE UserName = ?', [req.json.username], (err, result) => {
         if (err) {
           throw err;
         } else {
