@@ -3,7 +3,6 @@ var models = require('../models');
 module.exports = {
   messages: {
     get: function (req, res) { // a function which handles a get request for all messages
-      console.log('response', res);
       models.messages.get((err, data) => {
         if (err) {
           console.log('message get control err', err);
@@ -14,12 +13,12 @@ module.exports = {
     },
     post: function (req, res) {
       //how are we passing the message, in what form does it come?
-      console.log('messagePostReq', req);
+      console.log('messagePostReq', req.body);
       models.messages.post(req.body, (err, data) => {
         if (err) {
           console.log('msg post control err', err);
         } else {
-          res.send('success!');
+          res.sendStatus(200);
         }
       });
     } // a function which handles posting a message to the database
@@ -38,14 +37,12 @@ module.exports = {
       });
     },
     post: function (req, res) {
-      console.log('users post req', req);
-      // res or req.body???
-      // how are we passing the username?
-      models.users.post((err, data) => {
+      console.log('user post request', req.body);
+      models.users.post(req.body, (err, data) => {
         if (err) {
           console.log('msg post control err', err);
         } else {
-          res.send('success!');
+          res.sendStatus(200);
         }
       });
     }
