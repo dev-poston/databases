@@ -15,14 +15,13 @@ module.exports = {
     }, // a function which produces all the messages
     post: function (req, callback) {
       // use question mark
-      db.query('INSERT INTO messagesTABLE(MessageTEXT, User) VALUES( = ?, (SELECT UserID FROM UserTABLE WHERE UserName = ?)', [req.body.message, req.body.username], (err, result) => {
+      db.query(`INSERT INTO messagesTABLE (MessageTEXT, User) VALUES ('${req.message}', '${req.username}')`, (err, result) => {
         if (err) {
           throw err;
         } else {
           console.log('models msg post success!');
         }
       });
-
     } // a function which can be used to insert a message into the database
   },
 

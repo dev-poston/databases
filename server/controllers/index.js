@@ -19,7 +19,7 @@ module.exports = {
         if (err) {
           console.log('msg post control err', err);
         } else {
-          res.send('success!');
+          res.send('control msg post success!');
         }
       });
     } // a function which handles posting a message to the database
@@ -41,7 +41,7 @@ module.exports = {
       console.log('users post req', req);
       // res or req.body???
       // how are we passing the username?
-      models.users.post((err, data) => {
+      models.users.post(req.body, (err, data) => {
         if (err) {
           console.log('msg post control err', err);
         } else {
