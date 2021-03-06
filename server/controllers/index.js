@@ -37,7 +37,6 @@ module.exports = {
       });
     },
     post: function (req, res) {
-      console.log('user post request', req.body);
       models.users.post(req.body, (err, data) => {
         if (err) {
           console.log('msg post control err', err);
