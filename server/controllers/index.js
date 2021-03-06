@@ -1,6 +1,5 @@
 //var models = require('../models');
 var db = require('../db');
-console.log(db);
 
 module.exports = {
   messages: {
@@ -12,10 +11,12 @@ module.exports = {
       //     res.send(data);
       //   }
       // });
-      db.Message.findAll({attributes: ['text', 'roomname', 'userid', 'id']})
+      db.Message.findAll({attributes: ['text', 'roomname', 'username'], raw: true})
         .then((messages) => {
-          console.log('in msg find', messages.Instance.dataValues);
-          res.send(messages.Instance.dataValues);
+          console.log('in msg find', messages);
+          for (var i = 0; i < messages.length; i++) {
+            res.send(messages[i]);
+          }
         });
     },
     post: function (req, res) {
@@ -48,6 +49,11 @@ module.exports = {
       //     res.send(data);
       //   }
       // });
+      db.User.findAll({attributes: ['id', 'username'], plain: true})
+        .then((user) => {
+          console.log('in user find', user.dataValues);
+          res.send(user.dataValues);
+        });
     },
     post: function (req, res) {
       // models.users.post(req.body, (err, data) => {
@@ -57,6 +63,10 @@ module.exports = {
       //     res.sendStatus(200);
       //   }
       // });
+      db.User.create(req.body)
+        .catch((error) => {
+          console.log('user post err:', error);
+        });
     }
   }
 };
