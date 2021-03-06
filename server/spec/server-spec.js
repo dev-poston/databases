@@ -67,7 +67,7 @@ describe('Persistent Node Chat Server', function() {
 
   it('Should output all messages from the DB', function(done) {
     // Let's insert a message into the db
-    var userQString = 'insert into userTABLE (UserNAME) VALUES ("Maracus")';
+    var userQString = 'insert into userTABLE (UserNAME) VALUES ("Maracus") ON DUPLICATE KEY UPDATE UserNAME = "Maracus"';
     var queryString = 'insert into messagesTABLE(messageTEXT, UserKey, Room) values("Men like you can never change!", (SELECT USerID FROM userTABLE WHERE UserNAME = "Maracus"), "main")';
     var queryArgs = [];
     // TODO - The exact query string and query args to use
@@ -75,7 +75,7 @@ describe('Persistent Node Chat Server', function() {
     // them up to you. */
     dbConnection.query(userQString, queryArgs, function(err) {
       if (err) { throw err; }
-      done();
+      //done
     });
     dbConnection.query(queryString, queryArgs, function(err) {
       if (err) { throw err; }
@@ -90,4 +90,48 @@ describe('Persistent Node Chat Server', function() {
       });
     });
   });
+
+  it('should correctly add user to user request', function(done) {
+    let userQString = 'insert into usertable (username) values ("Timothy") ON DUPLICATE KEY UPDATE UserNAME = "Timothy"';
+    var queryArgs = [];
+    dbConnection.query(userQString, queryArgs, function (err) {
+      if (err) { throw err; }
+      request('http://127.0.0.1:3000/classes/users', function(error, response, body) {
+        let userLog = JSON.parse(body);
+        let boolean = false;
+        for (let i = 0; i < userLog.length; i++) {
+          for (var key in userLog[i]) {
+            if (userLog[i][key] === 'Timothy') {
+              boolean = true;
+            }
+          }
+        }
+        expect(boolean).to.equal(true);
+        done();
+      });
+    });
+  });
+
+  it('messagestable should contain foreign keys', function(done) {
+    let userNumber = 'insert into messagestable (messagetext, room, userkey) values ("Settle down Maracu{\'}s", "lockerRoom", (select userid from usertable where username = "Timothy"))';
+    let queryArgs = [];
+    dbConnection.query(userNumber, queryArgs, function (err) {
+      if (err) { throw err; }
+      request('http://127.0.0.1:3000/classes/users', function (error, response, body) {
+        let userBody = JSON.parse(body);
+        request('http://127.0.0.1:3000/classes/messages', function (error, response, body) {
+          let messageBody = JSON.parse(body);
+          let boolean = false;
+          for (let i = 0; i < userBody.length; i++) {
+            if (messageBody[0].UserKey === userBody[i].UserID) {
+              boolean = true;
+            }
+          }
+          expect(boolean).to.equal(true);
+          done();
+        });
+      });
+    });
+  });
 });
+
