@@ -15,7 +15,7 @@ CREATE TABLE messagesTABLE (
 
 CREATE TABLE userTABLE (
   UserID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  UserNAME varchar(255)
+  UserNAME varchar(255) unique
   -- FOREIGN KEY (Messages) REFERENCES messagesTABLE (MessageID)
 );
 

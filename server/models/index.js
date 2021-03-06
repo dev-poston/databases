@@ -14,7 +14,7 @@ module.exports = {
     post: function (req, callback) {
       // use question mark
       console.log('req.message', req.text);
-      db.dbConnection.query(`INSERT INTO messagesTABLE (MessageTEXT, User, Room) VALUES ('${req.text}', '${req.username}', '${req.roomname}')`, (err, result) => {
+      db.dbConnection.query(`INSERT INTO messagesTABLE (MessageTEXT, UserKey, Room) VALUES ('${req.text}', (SELECT UserID FROM UserTABLE WHERE UserNAME = '${req.username}'), '${req.roomname}')`, (err, result) => {
         if (err) {
           callback(err);
         } else {
@@ -37,7 +37,7 @@ module.exports = {
     },
     post: function (req, callback) {
       console.log('req.username', req.username);
-      db.dbConnection.query(`INSERT INTO userTABLE (UserNAME) VALUES ('${req.username}')`, (err, result) => {
+      db.dbConnection.query(`INSERT INTO userTABLE (UserNAME) VALUES ('${req.username}') ON DUPLICATE KEY UPDATE UserNAME = '${req.username}'`, (err, result) => {
         if (err) {
           callback(err);
         } else {
@@ -49,3 +49,4 @@ module.exports = {
   }
 };
 
+// WHERE NOT EXISTS (SELECT UserNAME FROM userTABLE WHERE UserNAME = '${req.username}')
