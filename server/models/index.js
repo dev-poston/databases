@@ -1,25 +1,23 @@
-var db = require('../db');
+var db = require('../db/index.js');
 
 module.exports = {
   messages: {
     get: function (callback) {
-      db.query('SELECT * FROM messagesTABLE', (error, result) => {
-        console.log('result at messages module', result);
+      db.dbConnection.query('SELECT * FROM messagesTABLE', (error, result) => {
         if (error) {
-          console.log('msg get error at models', error);
+          callback(error);
         } else {
-          console.log('result', result);
           callback(null, result);
         }
       });
     }, // a function which produces all the messages
     post: function (req, callback) {
       // use question mark
-      db.query(`INSERT INTO messagesTABLE (MessageTEXT, User) VALUES ('${req.message}', '${req.username}')`, (err, result) => {
+      db.dbConnection.query(`INSERT INTO messagesTABLE (MessageTEXT) VALUES ('${req.message}')`, (err, result) => {
         if (err) {
-          throw err;
+          callback(err);
         } else {
-          console.log('models msg post success!');
+          callback(null, 'success');
         }
       });
     } // a function which can be used to insert a message into the database
@@ -27,8 +25,25 @@ module.exports = {
 
   users: {
     // Ditto as above.
-    get: function () {},
-    post: function () {}
+    get: function (callback) {
+      db.dbConnection.query('SELECT * FROM userTABLE', (err, result) => {
+        if (err) {
+          callback(err);
+        } else {
+          callback(null, result);
+        }
+      });
+    },
+    post: function (req, callback) {
+      db.dbConnection.query(`INSERT INTO userTABLE (UserNAME) VALUES ('${req.username}')`, (err, result) => {
+        if (err) {
+          callback(err);
+        } else {
+          console.log('models user post success!');
+          callback(null, 'success');
+        }
+      });
+    }
   }
 };
 

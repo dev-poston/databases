@@ -6,7 +6,8 @@ CREATE TABLE messagesTABLE (
   /* Describe your table here.*/
   MessageID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   MessageTEXT varchar(255),
-  User int,
+  User varchar(255),
+  UserKey int,
   Room varchar(255)
   -- FOREIGN KEY (User) REFERENCES userTABLE (UserID),
   -- FOREIGN KEY (Room) REFERENCES roomTABLE (RoomID)
@@ -18,7 +19,7 @@ CREATE TABLE userTABLE (
   -- FOREIGN KEY (Messages) REFERENCES messagesTABLE (MessageID)
 );
 
-ALTER TABLE messagesTABLE ADD FOREIGN KEY (User) REFERENCES userTABLE (UserID);
+ALTER TABLE messagesTABLE ADD FOREIGN KEY (UserKey) REFERENCES userTABLE (UserID);
 -- CREATE TABLE roomTABLE (
 --   RoomID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
 --   RoomNAME varchar(255),
