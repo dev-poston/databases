@@ -30,15 +30,20 @@ var db = new Sequelize('chatterboxdb', 'root', 'student');
 var User = db.define('User', {
   username: Sequelize.STRING
 });
-
 User.sync();
+
 var Message = db.define('Message', {
-  //userid: Sequelize.INTEGER,
+  // userid: Sequelize.INTEGER,
+  // userString: Sequelize.STRING,
+  // UserId: integer,
   text: Sequelize.STRING,
   roomname: Sequelize.STRING
 });
 
-User.hasMany(Message);
+// Project.belongsTo(User, { foreignKey: 'id_manager' });
+// User.hasMany(Project, { foreignKey: 'id_manager' });
+
+User.hasOne(Message);
 Message.belongsTo(User);
 
 Message.sync();

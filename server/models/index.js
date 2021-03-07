@@ -7,6 +7,7 @@ module.exports = {
         if (error) {
           callback(error);
         } else {
+          console.log('result', result);
           callback(null, result);
         }
       });
