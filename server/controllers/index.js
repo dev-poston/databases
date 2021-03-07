@@ -11,12 +11,9 @@ module.exports = {
       //     res.send(data);
       //   }
       // });
-      db.Message.findAll({attributes: ['text', 'roomname', 'username'], raw: true})
+      db.Message.findAll({attributes: ['text', 'roomname', 'id'], raw: true})
         .then((messages) => {
-          console.log('in msg find', messages);
-          for (var i = 0; i < messages.length; i++) {
-            res.send(messages[i]);
-          }
+          res.send(messages);
         });
     },
     post: function (req, res) {
@@ -29,11 +26,21 @@ module.exports = {
       //     res.sendStatus(200);
       //   }
       // });
+      console.log('req.body', req.body);
+      var reqBody;
+      db.User.findOrCreate({where: {username: req.body.username}, raw: true})
+        .then((data) => {
+          console.log('data', data);
+          reqBody = {UserId: data[0].id, text: req.body.text, roomname: req.body.roomname };
+          console.log('req..body', req.body);
+        });
+      console.log('reqBody', reqBody);
 
-      db.Message.create(req.body)
+      db.Message.create(reqBody)
         .catch((error) => {
           console.log('msg post err:', error);
         });
+
 
     } // a function which handles posting a message to the database
   },
