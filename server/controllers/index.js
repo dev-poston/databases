@@ -14,6 +14,9 @@ module.exports = {
       db.Message.findAll({attributes: ['text', 'roomname', 'id'], raw: true})
         .then((messages) => {
           res.send(messages);
+        })
+        .catch((error) => {
+          res.send(error);
         });
     },
     post: function (req, res) {
@@ -26,19 +29,21 @@ module.exports = {
       //     res.sendStatus(200);
       //   }
       // });
-      console.log('req.body', req.body);
+      console.log('msg post reqbody:---------', req.body);
       db.User.findOrCreate({where: {username: req.body.username}, raw: true})
         .then((data) => {
+          console.log('data---------', data);
           let reqBody = {UserId: data[0].id, text: req.body.text, roomname: req.body.roomname };
           return reqBody;
         })
         .then((reqBody) => {
-          console.log('reeeq', reqBody);
           db.Message.create(reqBody);
+          res.send(reqBody);
+          //res.end();
+        })
+        .catch((error) => {
+          res.send(error);
         });
-
-      console.log('reqBody', reqBody);
-
     }
   },
 
@@ -55,8 +60,11 @@ module.exports = {
       // });
       db.User.findAll({attributes: ['id', 'username'], plain: true})
         .then((user) => {
-          console.log('in user find', user.dataValues);
           res.send(user.dataValues);
+          // res.end();
+        })
+        .catch((err) => {
+          res.send(err);
         });
     },
     post: function (req, res) {
@@ -67,9 +75,13 @@ module.exports = {
       //     res.sendStatus(200);
       //   }
       // });
-      db.User.create(req.body)
+      console.log('user post req:', req.body);
+      db.User.findOrCreate({where: {username: req.body.username}, raw: true})
+        .then((data) => {
+          res.send(data);
+        })
         .catch((error) => {
-          console.log('user post err:', error);
+          res.send(error);
         });
     }
   }
