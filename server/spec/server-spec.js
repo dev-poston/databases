@@ -74,6 +74,21 @@ describe('Persistent Node Chat Server', function() {
     });
   });
 
+  it ('users should have auto-incrementing id', function(done) {
+    var queryStr = 'select id from users';
+    var queryArgs = [];
+    var boolean = false;
+    dbConnection.query(queryStr, queryArgs, function(err, results) {
+      for ( var i = 0; i < results.length; i++) {
+        if (results[i].id === i + 1) {
+          boolean = true;
+        }
+      }
+      expect(boolean).to.equal(true);
+      done();
+    });
+  });
+
   it('messagestable should contain foreign keys', function(done) {
     request({
       method: 'POST',
@@ -106,8 +121,8 @@ describe('Persistent Node Chat Server', function() {
         var userRes;
         dbConnection.query(queryUser, queryArgs, function(err, uresults) {
           userRes = uresults;
-          console.log('userres-------', userRes);
-          console.log('msgres-------', msgRes);
+          // console.log('userres-------', userRes);
+          // console.log('msgres-------', msgRes);
           // TODO: If you don't have a column named text, change this test.
           let found = false;
           for (var i = 0; i < userRes.length; i++) {
