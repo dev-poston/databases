@@ -27,22 +27,19 @@ module.exports = {
       //   }
       // });
       console.log('req.body', req.body);
-      var reqBody;
       db.User.findOrCreate({where: {username: req.body.username}, raw: true})
         .then((data) => {
-          console.log('data', data);
-          reqBody = {UserId: data[0].id, text: req.body.text, roomname: req.body.roomname };
-          console.log('req..body', req.body);
+          let reqBody = {UserId: data[0].id, text: req.body.text, roomname: req.body.roomname };
+          return reqBody;
+        })
+        .then((reqBody) => {
+          console.log('reeeq', reqBody);
+          db.Message.create(reqBody);
         });
+
       console.log('reqBody', reqBody);
 
-      db.Message.create(reqBody)
-        .catch((error) => {
-          console.log('msg post err:', error);
-        });
-
-
-    } // a function which handles posting a message to the database
+    }
   },
 
   users: {

@@ -35,7 +35,7 @@ User.sync();
 var Message = db.define('Message', {
   // userid: Sequelize.INTEGER,
   // userString: Sequelize.STRING,
-  // UserId: integer,
+  UserId: Sequelize.INTEGER,
   text: Sequelize.STRING,
   roomname: Sequelize.STRING
 });
@@ -43,8 +43,8 @@ var Message = db.define('Message', {
 // Project.belongsTo(User, { foreignKey: 'id_manager' });
 // User.hasMany(Project, { foreignKey: 'id_manager' });
 
-User.hasOne(Message);
-Message.belongsTo(User);
+// User.hasOne(Message);
+// Message.belongsTo(User);
 
 Message.sync();
 
